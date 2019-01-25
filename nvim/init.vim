@@ -46,4 +46,4 @@ call plug#end()
 "
 syntax on
 set background=dark
-colorscheme solarized
+silent! colorscheme solarized
