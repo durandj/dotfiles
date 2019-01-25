@@ -1,0 +1,21 @@
+---
+- hosts: all
+  tasks:
+    - name: Install NeoVim
+      become: yes
+      apt:
+        name:
+          - exuberant-ctags
+          - git
+          - neovim
+        update_cache: yes
+
+    - name: Configure NeoVim
+      file:
+        path: ~/.config/nvim
+        src: "{{ playbook_dir }}/../../nvim"
+        force: true
+        state: link
+
+    - name: Install NeoVim plugins
+      shell: nvim +PlugInstall +qall
