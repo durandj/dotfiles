@@ -5,6 +5,8 @@
       become: yes
       apt:
         name:
+          - build-essential
+          - cmake
           - exuberant-ctags
           - git
           - neovim
@@ -19,3 +21,8 @@
 
     - name: Install NeoVim plugins
       shell: nvim +PlugInstall +qall
+
+    - name: Build YouCompleteMe for NeoVim
+      shell: "./install.py {{ completers | join(' ') }}"
+      args:
+        chdir: ~/.config/nvim/plugged/YouCompleteMe
