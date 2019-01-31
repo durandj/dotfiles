@@ -23,10 +23,11 @@ accomplish this, I use `pipsi` (Pip Script Installer).
 
 ```bash
 sudo apt update
-sudo apt install python3 python3-dev python3-pip python3-venv
-curl https://bootstrap.pypa.io/get-pip.py | python3
-pip install python3-venv
-curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py | python3
+sudo apt install curl python3 python3-dev python3-pip python3-venv
+curl https://bootstrap.pypa.io/get-pip.py | sudo python3
+sudo pip install virtualenv
+curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py | sudo python3
+sudo chown --recursive james:james ~/.local
 ```
 
 ### Ansible
@@ -55,3 +56,21 @@ when needed.
 playbooks on and how to connect to them. In this case it's saying to
 only connect to `localhost` and that you don't need to use `ssh` to
 do it.
+
+### Special Notes
+
+#### Nvim
+
+You'll need to include the `--extra-vars` argument for this playbook
+and specify a set of completers to use. For example:
+
+```
+--extra-vars '{ "completers": [ "--clang-completer" ] }'
+```
+
+#### Zsh
+
+Because of the way the oh-my-zsh installer works, it expects Zsh to
+be the current shell. This won't be the case yet when installing it
+so you might need to run the Zsh playbook twice with the first time
+failing.
