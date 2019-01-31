@@ -1,0 +1,15 @@
+---
+- hosts: all
+  tasks:
+    - name: Install operational tools
+      become: yes
+      apt:
+        name:
+          - tmux
+        update_cache: yes
+
+    - name: Setup Tmux configuration
+      file:
+        src: "{{ playbook_dir }}/../../tmux/tmux.conf"
+        path: ~/.tmux.conf
+        state: link
