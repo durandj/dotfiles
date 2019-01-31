@@ -5,8 +5,13 @@
       become: yes
       apt:
         name:
+          - htop
           - tmux
         update_cache: yes
+
+    - name: Install sensor monitoring
+      become: yes
+      shell: "snap install sensors-unity && snap connect sensors-unity:hardware-observe :hardware-observe"
 
     - name: Setup Tmux configuration
       file:
