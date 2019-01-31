@@ -1,0 +1,19 @@
+[alias]
+    co = checkout
+    branches = branch -v
+
+[color]
+    ui = auto
+
+[core]
+    excludesfile = ~/.gitignore_global
+    editor = nvim
+
+[push]
+    default = simple
+    recurseSubmodules = check
+
+[user]
+    email = james.durand@alumni.msoe.edu
+    name = James Durand
+    useconfigonly = true

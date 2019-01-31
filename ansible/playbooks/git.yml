@@ -1,0 +1,27 @@
+---
+- hosts: all
+  tasks:
+    - name: Add latest Git PPA
+      become: yes
+      apt_repository:
+        repo: ppa:git-core/ppa
+        state: present
+
+    - name: Install Git
+      become: yes
+      apt:
+        name:
+          - git
+        update_cache: yes
+
+    - name: Add configuration
+      file:
+        src: "{{ playbook_dir }}/../../git/gitconfig"
+        path: ~/.gitconfig
+        state: link
+
+    - name: Add global ignore
+      file:
+        src: "{{ playbook_dir }}/../../git/gitignore_global"
+        path: ~/.gitignore_global
+        state: link

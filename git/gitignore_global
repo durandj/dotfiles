@@ -1,0 +1,52 @@
+####################
+# Global
+####################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.swp
+*.!sync
+*.SyncPart
+tags
+tags.lock
+tags.temp
+.ycm_extra_conf.py
+
+####################
+# Python
+####################
+*.pyc
+.env
+.python-version
+
+####################
+# Java
+####################
+*.class
+
+####################
+# C/C++
+####################
+*.o
+
+####################
+# Javascript
+####################
+.node-version
+.tern-port
+
+####################
+# Tmuxp
+####################
+
+.tmuxp.json
+
+####################
+# Atom
+####################
+
+.linter-clang-includes
