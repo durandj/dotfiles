@@ -9,7 +9,7 @@ set incsearch                        " Enables incremental search
 set laststatus=2                     " Always show the status bar
 set list                             " Show invisible characters
 " Set the characters to use for invisible characters
-set listchars=eol:¬,tab:▸\ ,space:•,extends:→,precedes:←
+set listchars=eol:¬,tab:▸\ ,space:·,extends:→,precedes:←
 set expandtab                        " Expand tabs to spaces
 set shiftwidth=4                     " Set the number of spaces in a tab
 set tabstop=4                        " Set the visible width of a tab
