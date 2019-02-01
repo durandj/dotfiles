@@ -90,8 +90,10 @@ export PATH=~/.local/bin:$PATH
 # Setup dircolors to match terminal theme
 eval `dircolors ~/.dir_colors/dircolors`
 
-# Local configuration
-if [ -f ~/.zshrc_local ];
+# Source any additional, local configurations
+if [ -d ~/.zshrc.d ];
 then
-    source ~/.zshrc_local
+    for file in ~/.zshrc.d/*; do
+        source "$file"
+    done
 fi
