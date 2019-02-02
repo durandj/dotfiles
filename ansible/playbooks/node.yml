@@ -26,7 +26,7 @@
 
     - name: Add nodenv to environment
       copy:
-        dest: ~/.zshrc.d/nodenv
+        dest: ~/.zshrc.d/node
         content: "export PATH=\"$HOME/.nodenv/bin:$PATH\"\neval \"$(nodenv init -)\""
         mode: 0644
 
