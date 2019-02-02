@@ -27,7 +27,7 @@
     - name: Add nodenv to environment
       copy:
         dest: ~/.zshrc.d/nodenv
-        content: 'export PATH="$HOME/.nodenv/bin:$PATH"'
+        content: "export PATH=\"$HOME/.nodenv/bin:$PATH\"\neval \"$(nodenv init -)\""
         mode: 0644
 
     - name: Install node-build plugin
