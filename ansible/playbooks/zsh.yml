@@ -13,18 +13,12 @@
           - zsh
         update_cache: yes
 
-    - name: Check current user
-      shell: whoami
-      register: username
-
-    - name: Check current shell
-      shell: "getent passwd $USER | cut --delimiter=: --fields=7"
-      register: current_shell
-
     - name: Set default shell to Zsh
       become: yes
-      shell: "chsh --shell $(which zsh) {{ username.stdout }}"
-      when: current_shell.stdout != '/usr/bin/zsh'
+      user:
+        name: "{{ ansible_env['USER'] }}"
+        create_home: no
+        shell: /usr/bin/zsh
 
     - name: Install oh-my-zsh
       shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
