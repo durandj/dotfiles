@@ -1,0 +1,17 @@
+---
+- hosts: all
+  tasks:
+    - name: Install goenv
+      git:
+        repo: https://github.com/syndbg/goenv.git
+        dest: ~/.goenv
+
+    - name: Make config directory for Zsh
+      file:
+        path: ~/.zshrc.d
+        state: directory
+
+    - name: Add goenv to environment
+      copy:
+        dest: ~/.zshrc.d/golang
+        content: "export GOENV_ROOT=\"$HOME/.goenv\"\nexport PATH=\"$GOENV_ROOT/bin:$PATH\"\neval \"$(goenv init -)\""
