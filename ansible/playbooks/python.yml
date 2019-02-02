@@ -1,0 +1,36 @@
+---
+- hosts: all
+  tasks:
+    - name: Install dependencies
+      become: yes
+      apt:
+        name:
+          - gcc
+          - git
+          - libbz2-dev
+          - libffi-dev
+          - libreadline-dev
+          - libsqlite3-dev
+          - libssl-dev
+          - make
+          - zlib1g-dev
+
+    - name: Download Pyenv
+      git:
+        repo: https://github.com/pyenv/pyenv.git
+        dest: ~/.pyenv
+
+    - name: Make config directory for Zsh
+      file:
+        path: ~/.zshrc.d
+        state: directory
+
+    - name: Install Pyenv Virtualenv
+      git:
+        repo: https://github.com/pyenv/pyenv-virtualenv.git
+        dest: ~/.pyenv/plugins/pyenv-virtualenv
+
+    - name: Add pyenv to environment
+      copy:
+        dest: ~/.zshrc.d/python
+        content: "export PYENV_ROOT=\"$HOME/.pyenv\"\nexport PATH=\"$HOME/.pyenv/bin:$PATH\"\neval \"$(pyenv init -)\"\neval \"$(pyenv virtualenv-init -)\""
