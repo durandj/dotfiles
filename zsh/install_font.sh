@@ -2,7 +2,7 @@
 
 nerd_font_version=v2.0.0
 font_name=SourceCodePro
-font_dir=~/.local/share/fonts
+font_dir=~/.local/share/fonts/NerdFonts
 
 mkdir --parents $font_dir
 
@@ -15,3 +15,5 @@ curl \
 unzip $font_name.zip
 rm $font_name.zip
 popd
+
+fc-cache --force $font_dir

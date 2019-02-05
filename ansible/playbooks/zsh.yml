@@ -36,7 +36,7 @@
       become: yes
       shell: "{{ playbook_dir }}/../../zsh/install_font.sh"
       args:
-        creates: "/usr/local/share/fonts/NerdFonts/Inconsolata Nerd Font Complete.otf"
+        creates: "~/.local/share/fonts/NerdFonts/Inconsolata Nerd Font Complete.otf"
 
     - name: Check for terminal profile
       shell: "{{ playbook_dir }}/../../zsh/is_theme_configured.sh"
