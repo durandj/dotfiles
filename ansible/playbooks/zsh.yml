@@ -23,6 +23,7 @@
     - name: Install oh-my-zsh
       shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
       args:
+        executable: /usr/bin/zsh
         creates: ~/.oh-my-zsh
 
     - name: Configure Zsh
