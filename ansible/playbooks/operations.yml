@@ -8,6 +8,7 @@
           - htop
           - lm-sensors
           - tmux
+          - tree
         update_cache: yes
 
     - name: Setup Tmux configuration
