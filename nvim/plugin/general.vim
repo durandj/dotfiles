@@ -20,8 +20,8 @@ set wildignorecase                   " Ignore case when completing file names
 set colorcolumn=70,80,100,120        " Set additional colored columns
 
 " Change text color for whitespace characters defined by listchars.
-highlight Whitespace ctermfg=darkgrey
-highlight NonText ctermfg=darkgrey
+highlight Whitespace ctermfg=240
+highlight NonText ctermfg=240
 
 " Make trailing whitespace annoyingly highlighted.
 highlight ExtraWhitespace ctermbg=red guibg=red
