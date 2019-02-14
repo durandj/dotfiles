@@ -33,4 +33,4 @@
     - name: Add pyenv to environment
       copy:
         dest: ~/.zshrc.d/python
-        content: "export PYENV_ROOT=\"$HOME/.pyenv\"\nexport PATH=\"$HOME/.pyenv/bin:$PATH\"\neval \"$(pyenv init -)\"\neval \"$(pyenv virtualenv-init -)\""
+        content: "export PYENV_ROOT=\"$HOME/.pyenv\"\nexport PATH=\"$HOME/.pyenv/bin:$PATH\"\neval \"$(pyenv init -)\"\neval \"$(pyenv virtualenv-init -)\"\nexport PYTHON_CONFIGURE_OPTS=\"--enable-shared\""
