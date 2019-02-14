@@ -39,6 +39,7 @@ Plug 'ludovicchabant/vim-gutentags'  " Handles tag generation and maintenance
 Plug 'majutsushi/tagbar'             " Adds a sidebar containing tag information
 Plug 'junegunn/fzf'                  " Fuzzy finder core library
 Plug 'junegunn/fzf.vim'              " Fuzzy finder integration for vim
+Plug 'fatih/vim-go'                  " Better Golang support
 call plug#end()
 
 "

@@ -1,6 +1,12 @@
 ---
 - hosts: all
   tasks:
+    - name: Add NeoVim PPA
+      become: yes
+      apt_repository:
+        repo: ppa:neovim-ppa/stable
+        state: present
+
     - name: Install NeoVim
       become: yes
       apt:
