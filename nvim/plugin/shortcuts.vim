@@ -21,7 +21,7 @@ endif
 
 vnoremap <silent> <leader>d d: call system(copyCmd, getreg('\"'))<CR>
 vnoremap <silent> <leader>y y: call system(copyCmd, getreg("\""))<CR>
-nnoremap <silent> <leader>p :call setreg("\"",system(pasteCmd))<CR>
+nnoremap <silent> <leader>p :call setreg("\"",system(pasteCmd))<CR>p
 
 " Move between wrapped lines
 noremap j gj
