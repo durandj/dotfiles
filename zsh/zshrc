@@ -87,8 +87,10 @@ export MYNVIMRC=~/.config/nvim/init.vim
 # Pipsi configuration
 export PATH=~/.local/bin:$PATH
 
-# Setup dircolors to match terminal theme
-eval `dircolors ~/.dir_colors/dircolors`
+if [ -f ~/.dir_colors/dircolors ]; then
+    # Setup dircolors to match terminal theme
+    eval `dircolors ~/.dir_colors/dircolors`
+fi
 
 # Source any additional, local configurations
 if [ -d ~/.zshrc.d ];
