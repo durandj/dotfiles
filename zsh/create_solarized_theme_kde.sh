@@ -14,7 +14,7 @@ function main() {
         --output-document "$kde_theme_file" \
         "https://github.com/phiggins/konsole-colors-solarized/raw/master/Solarized%20$theme.colorscheme"
 
-    mkdir ~/.dir_colors
+    mkdir --parents ~/.dir_colors
     wget \
         --output-document ~/.dir_colors/dircolors \
         "https://github.com/seebi/dircolors-solarized/raw/master/dircolors.256dark"
