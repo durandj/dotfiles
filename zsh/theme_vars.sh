@@ -25,4 +25,4 @@ gsettings_profiles_dir=org.gnome.Terminal.ProfilesList
 # GSettings directory for getting a terminal profile.
 gsettings_profile_dir=org.gnome.Terminal.Legacy.Profile
 
-kde_theme_file="~/.kde/share/apps/konsole/Solarized\ $(tr '[:lower:]' '[:upper:]' <<< ${theme_scheme:0:1})${theme_scheme:1}.colorscheme"
+kde_theme_file="$HOME/.kde/share/apps/konsole/Solarized $(tr '[:lower:]' '[:upper:]' <<< ${theme_scheme:0:1})${theme_scheme:1}.colorscheme"

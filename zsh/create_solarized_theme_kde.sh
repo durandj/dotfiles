@@ -9,10 +9,12 @@ source './theme_vars.sh'
 function main() {
     theme="$(tr '[:lower:]' '[:upper:]' <<< ${theme_scheme:0:1})${theme_scheme:1}"
 
+    mkdir --parents $(dirname $kde_theme_file)
+
     pushd ~/.local/share
 
     wget \
-        --output-document $kde_theme_file \
+        --output-document "$kde_theme_file" \
         "https://github.com/phiggins/konsole-colors-solarized/raw/master/Solarized%20$theme.colorscheme"
 
     popd # ~/.local/share
