@@ -24,7 +24,13 @@
         path: /usr/local/bin/restic
         mode: 755
 
-    - name: Create key directory
+    - name: Create config directory
       file:
         path: ~/.config/restic
         state: directory
+
+    - name: Copy exclude config file
+      copy:
+        src: "{{ playbook_dir }}/../../restic/exclude"
+        dest: ~/.config/restic
+        force: yes
