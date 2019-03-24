@@ -16,7 +16,7 @@ function main() {
 
     mkdir ~/.dir_colors
     wget \
-        --output-document ~/.dir_colors/dircolors
+        --output-document ~/.dir_colors/dircolors \
         "https://github.com/seebi/dircolors-solarized/raw/master/dircolors.256dark"
 }
 
