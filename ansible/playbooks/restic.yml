@@ -1,0 +1,30 @@
+---
+- hosts: all
+  vars:
+    RESTIC_VERSION: 0.9.4
+
+  tasks:
+    - name: Install dependencies
+      become: yes
+      apt:
+        name:
+          - bzip2
+        state: present
+
+    - name: Install restic
+      become: yes
+      shell: "wget --output-document - https://github.com/restic/restic/releases/download/v{{ RESTIC_VERSION }}/restic_{{ RESTIC_VERSION }}_linux_amd64.bz2 | bunzip2 > /usr/local/bin/restic"
+      args:
+        warn: no
+        creates: /usr/local/bin/restic
+
+    - name: Set restic file permissions
+      become: yes
+      file:
+        path: /usr/local/bin/restic
+        mode: 755
+
+    - name: Create key directory
+      file:
+        path: ~/.config/restic
+        state: directory
