@@ -16,3 +16,7 @@ __pycache__
 *.class
 
 .git/modules
+
+tags
+tags.lock
+tags.temp
