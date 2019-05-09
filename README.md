@@ -27,7 +27,7 @@ sudo apt install curl python3 python3-dev python3-pip python3-venv
 curl https://bootstrap.pypa.io/get-pip.py | sudo python3
 sudo pip install virtualenv
 curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py | sudo python3
-sudo chown --recursive james:james ~/.local
+sudo chown --recursive $(id --user):$(id --group) ~/.local
 ```
 
 ### Ansible
