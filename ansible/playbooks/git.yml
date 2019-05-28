@@ -18,12 +18,11 @@
         update_cache: yes
 
     - name: Add configuration
-      file:
+      copy:
         src: "{{ playbook_dir }}/../../git/gitconfig"
-        path: ~/.gitconfig
-        state: link
+        dest: ~/.gitconfig
 
-    - name: Add global ignore
+    - name: Add global gitignore
       file:
         src: "{{ playbook_dir }}/../../git/gitignore_global"
         path: ~/.gitignore_global
