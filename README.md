@@ -8,34 +8,32 @@ My personal environment configuration.
  * Python 3.x
  * Curl
  * [Pip](https://pip.pypa.io/en/stable/installing/)
- * [Pipsi](https://github.com/mitsuhiko/pipsi)
+ * [PipX](https://pipxproject.github.io/pipx)
  * [Ansible](https://ansible.com/)
 
 ## Setup
 
-### Pipsi
+### PipX
 
 Any time that I need to install a Python based command globally I
 prefer to do so with each command in it's own virtual environment.
 This keeps the dependencies for each package isolated from any other
 and reducing the likelihood of one package breaking another. To
-accomplish this, I use `pipsi` (Pip Script Installer).
+accomplish this, I use `pipx`.
 
 ```bash
 sudo apt update
-sudo apt install curl python3 python3-dev python3-pip python3-venv
-curl https://bootstrap.pypa.io/get-pip.py | sudo python3
-sudo pip install virtualenv
-curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py | sudo python3
-sudo chown --recursive $(id --user):$(id --group) ~/.local
+sudo apt install python3 python3-pip python3-venv
+export ~/.local/bin:$PATH
+python3 -m pip install --user pipx
 ```
 
 ### Ansible
 
-With `pipsi` installed, I use that to install Ansible.
+With `pipx` installed, I use that to install Ansible.
 
 ```bash
-pipsi install ansible
+pipx install ansible
 ```
 
 ### Playbooks
