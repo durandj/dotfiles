@@ -50,3 +50,9 @@ tags.temp
 ####################
 
 .linter-clang-includes
+
+####################
+# VisualStudioCode
+####################
+
+.vscode/*
