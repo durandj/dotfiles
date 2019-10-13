@@ -9,8 +9,7 @@
           - ctags
           - git
           - neovim
-          #- python
-          #- python-dev
+          - python-pynvim
         update_cache: yes
 
     - name: Create NeoVim config directory
