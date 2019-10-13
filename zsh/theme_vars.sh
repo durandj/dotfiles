@@ -14,7 +14,7 @@ theme_scheme=dark
 [[ "$DESKTOP_SESSION" = "ubuntu" ]] && is_gnome="yes" || is_gnome="no"
 
 # If the desktop environment is powered by KDE.
-[[ "$DESKTOP_SESSION" = "plasma" ]] && is_kde="yes" || is_kde="no"
+[[ "$DESKTOP_SESSION" = "plasma" || "$DESKTOP_SESSION" = "/usr/share/xsessions/plasma" ]] && is_kde="yes" || is_kde="no"
 
 # DConf directory for terminal profiles.
 dconf_profile_dir=/org/gnome/terminal/legacy/profiles:
