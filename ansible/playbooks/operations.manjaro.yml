@@ -1,0 +1,21 @@
+---
+- hosts: all
+  vars:
+    gotop_version: "3.0.0"
+  tasks:
+    - name: Install operational tools
+      become: yes
+      pacman:
+        name:
+          - gotop-bin
+          - htop
+          - lm_sensors
+          - tmux
+          - tree
+        update_cache: yes
+
+    - name: Setup Tmux configuration
+      file:
+        src: "{{ playbook_dir }}/../../tmux/tmux.conf"
+        path: ~/.tmux.conf
+        state: link
