@@ -1,0 +1,48 @@
+---
+- hosts: all
+  tasks:
+    - name: Install Zsh
+      become: yes
+      pacman:
+        name:
+          #- dconf-cli
+          #- font-manager
+          - git
+          - unzip
+          - zsh
+        update_cache: yes
+
+    - name: Set default shell to Zsh
+      become: yes
+      user:
+        name: "{{ ansible_env['USER'] }}"
+        create_home: no
+        shell: /usr/bin/zsh
+
+    - name: Install oh-my-zsh
+      shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+      args:
+        executable: /usr/bin/zsh
+        creates: ~/.oh-my-zsh
+
+    - name: Configure Zsh
+      file:
+        path: ~/.zshrc
+        src: "{{ playbook_dir }}/../../zsh/zshrc"
+        force: true
+        state: link
+
+    - name: Install patched font
+      become: yes
+      shell: "{{ playbook_dir }}/../../zsh/install_font.sh"
+      args:
+        creates: "~/.local/share/fonts/NerdFonts/Inconsolata Nerd Font Complete.otf"
+
+    - name: Check for terminal profile
+      shell: "{{ playbook_dir }}/../../zsh/is_theme_configured.sh"
+      register: has_profile
+
+    - name: Create terminal profile
+      shell: "{{ playbook_dir }}/../../zsh/create_solarized_theme.sh"
+      when: has_profile.stdout != 'true'
+

@@ -24,8 +24,16 @@ accomplish this, I use `pipx`.
 ```bash
 sudo apt update
 sudo apt install python3 python3-pip python3-venv
-export ~/.local/bin:$PATH
+export PATH="~/.local/bin:$PATH"
 python3 -m pip install --user pipx
+```
+
+Or on a recent version of Manjaro.
+
+```bash
+export PATH="~/.local/bin:$PATH"
+python3 -m pip install --user pipx
+git clone https://github.com/kewlfft/ansible-aur.git ~/.ansible/plugins/modules/aur
 ```
 
 ### Ansible

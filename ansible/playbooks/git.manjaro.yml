@@ -1,0 +1,35 @@
+---
+- hosts: all
+  vars:
+    GIT_IGNORE_VERSION: 1.0.3
+
+  tasks:
+    - name: Install Git
+      become: yes
+      pacman:
+        name:
+          - git
+        update_cache: yes
+
+    - name: Add configuration
+      copy:
+        src: "{{ playbook_dir }}/../../git/gitconfig"
+        dest: ~/.gitconfig
+
+    - name: Add global gitignore
+      file:
+        src: "{{ playbook_dir }}/../../git/gitignore_global"
+        path: ~/.gitignore_global
+        state: link
+
+    - name: Install git-ignore
+      become: yes
+      get_url:
+        url: "https://github.com/durandj/git-ignore/releases/download/v{{ GIT_IGNORE_VERSION }}/git-ignore_v{{ GIT_IGNORE_VERSION }}_linux_amd64"
+        dest: /usr/local/bin/git-ignore
+
+    - name: Set git-ignore permissions
+      become: yes
+      file:
+        path: /usr/local/bin/git-ignore
+        mode: 755
