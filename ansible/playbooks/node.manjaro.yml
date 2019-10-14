@@ -1,0 +1,36 @@
+---
+- hosts: all
+  tasks:
+    - name: Install nodenv dependencies
+      become: yes
+      pacman:
+        name:
+          - gcc
+          - git
+          - make
+
+    - name: Install nodenv
+      git:
+        repo: https://github.com/nodenv/nodenv.git
+        dest: ~/.nodenv
+
+    - name: Compile dynamic bash extension for Nodenv
+      shell: "./src/configure && make -C src"
+      args:
+        chdir: ~/.nodenv
+
+    - name: Make config directory for Zsh
+      file:
+        path: ~/.zshrc.d
+        state: directory
+
+    - name: Add nodenv to environment
+      copy:
+        dest: ~/.zshrc.d/node
+        content: "export PATH=\"$HOME/.nodenv/bin:$PATH\"\neval \"$(nodenv init -)\""
+        mode: 0644
+
+    - name: Install node-build plugin
+      git:
+        repo: https://github.com/nodenv/node-build.git
+        dest: ~/.nodenv/plugins/node-build
