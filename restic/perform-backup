@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+RESTIC_DIR=~/.config/restic
+EXCLUDE_FILE=$RESTIC_DIR/exclude
+CONFIG_FILE=$RESTIC_DIR/files
+
+function check_repo_name {
+    if [ "$RESTIC_REPO" == "" ]; then
+        echo 'Environment variable RESTIC_REPO must be set'
+        exit 1
+    fi
+}
+
+function check_config_file {
+    if [ ! -f "$CONFIG_FILE" ]; then
+        echo "File patterns must be given in the $CONFIG_FILE file"
+        exit 1
+    fi
+}
+
+expand_path() {
+    local path
+    local -a path_elements result_path_elements
+    IFS=':' read -r -a path_elements <<<"$1"
+    : "${path_elements[@]}"
+    for path in "${path_elements[@]}"; do
+        : "$path"
+        case $path in
+        "~+"/*)
+            path=$PWD/${path#"~+/"}
+            ;;
+        "~-"/*)
+            path=$OLDPWD/${path#"~-/"}
+            ;;
+        "~"/*)
+            path=$HOME/${path#"~/"}
+            ;;
+        "~"*)
+            username=${path%%/*}
+            username=${username#"~"}
+            IFS=: read -r _ _ _ _ _ homedir _ < <(getent passwd "$username")
+            if [[ $path = */* ]]; then
+            path=${homedir}/${path#*/}
+            else
+            path=$homedir
+            fi
+            ;;
+        esac
+        result_path_elements+=( "$path" )
+    done
+    local result
+    printf -v result '%s:' "${result_path_elements[@]}"
+    printf '%s\n' "${result%:}"
+}
+
+function get_files {
+    local files=''
+    while read file; do
+        files="$files $(expand_path $file)"
+    done < $CONFIG_FILE
+
+    echo $files
+}
+
+function main {
+    check_repo_name
+    check_config_file
+
+    local files=$(get_files)
+
+    restic backup \
+        --repo $RESTIC_REPO \
+        --verbose \
+        --exclude-file $EXCLUDE_FILE \
+        $files
+}
+
+main

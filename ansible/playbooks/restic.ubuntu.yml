@@ -34,3 +34,11 @@
         src: "{{ playbook_dir }}/../../restic/exclude"
         dest: ~/.config/restic
         force: yes
+
+    - name: Copy backup script
+      become: yes
+      copy:
+        src: "{{ playbook_dir }}/../../restic/perform-backup"
+        dest: /usr/local/bin
+        force: yes
+        mode: '0755'
