@@ -5,9 +5,8 @@
       become: yes
       pacman:
         name:
-          #- dconf-cli
-          #- font-manager
           - git
+          - python-pygments
           - unzip
           - zsh
         update_cache: yes
