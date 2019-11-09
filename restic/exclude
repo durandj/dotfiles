@@ -20,3 +20,5 @@ __pycache__
 tags
 tags.lock
 tags.temp
+
+.terraform

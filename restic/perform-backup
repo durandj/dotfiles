@@ -62,15 +62,21 @@ function get_files {
     echo $files
 }
 
+function get_snapshot_tag {
+    echo `date --utc --iso-8601=seconds`
+}
+
 function main {
     check_repo_name
     check_config_file
 
+    local snapshot_tag=$(get_snapshot_tag)
     local files=$(get_files)
 
     restic backup \
         --repo $RESTIC_REPO \
         --verbose \
+        --tag $snapshot_tag \
         --exclude-file $EXCLUDE_FILE \
         $files
 }
