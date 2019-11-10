@@ -35,6 +35,14 @@
         dest: ~/.config/restic
         force: yes
 
+    - name: Copy setup script
+      become: yes
+      copy:
+        src: "{{ playbook_dir }}/../../restic/configure-backup"
+        dest: /usr/local/bin
+        force: yes
+        mode: '0755'
+
     - name: Copy backup script
       become: yes
       copy:

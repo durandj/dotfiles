@@ -5,8 +5,9 @@ EXCLUDE_FILE=$RESTIC_DIR/exclude
 CONFIG_FILE=$RESTIC_DIR/files
 
 function check_repo_name {
-    if [ "$RESTIC_REPO" == "" ]; then
-        echo 'Environment variable RESTIC_REPO must be set'
+    if [ "$RESTIC_REPOSITORY" == "" ]; then
+        echo 'Environment variable RESTIC_REPOSITORY must be set'
+        echo 'Run configure-backup to setup Restic'
         exit 1
     fi
 }
@@ -74,7 +75,6 @@ function main {
     local files=$(get_files)
 
     restic backup \
-        --repo $RESTIC_REPO \
         --verbose \
         --tag $snapshot_tag \
         --exclude-file $EXCLUDE_FILE \

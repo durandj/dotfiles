@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+
+function get_project_id {
+    read -p 'GCP project ID: ' project_id
+
+    echo $project_id
+}
+
+function get_storage_bucket {
+    read -p 'Bucket name: ' bucket_name
+
+    echo $bucket_name
+}
+
+function get_credentials_file {
+    local default_path="$HOME/.config/restic/gcs-restic.json"
+    local file_path=''
+
+    read -p "File path to credentials ($default_path): "
+    if [ "$file_path" == "" ]; then
+        file_path=$default_path
+    fi
+
+    echo $file_path
+}
+
+function get_confirmation {
+    read -p "Correct? (y/N): " response
+
+    local yes_pattern='[yY]'
+    if [[ $response =~ $yes_pattern ]]; then
+        echo "y"
+    fi
+
+    echo "n"
+}
+
+function write_to_file {
+    local project_id="$1"
+    local bucket_name="$2"
+    local credentials_file="$3"
+
+    cat <<EOF > ~/.zshrc.d/restic
+export RESTIC_REPOSITORY=$bucket_name
+export GOOGLE_PROJECT_ID=$project_id
+export GOOGLE_APPLICATION_CREDENTIALS=$credentials_file
+EOF
+}
+
+function main {
+    project_id="$(get_project_id)"
+    bucket_name=$(get_storage_bucket)
+    credentials_file=$(get_credentials_file)
+
+    if [ "$project_id" == "" ]; then
+        echo "GCP project ID is required but was empty"
+        exit 1
+    fi
+
+    if [ "$bucket_name" == "" ]; then
+        echo "Bucket name is required but was empty"
+        exit 1
+    fi
+
+    echo 'Is this correct?'
+    echo "    Project ID:       $project_id"
+    echo "    Bucket name:      $bucket_name"
+    echo "    Credentials file: $credentials_file"
+
+    if [ "$(get_confirmation)" == "n" ]; then
+        echo "Cancelled"
+        exit 1
+    fi
+
+    write_to_file $project_id $bucket_name $credentials_file
+    # TODO(durandj): write to file
+}
+
+main
