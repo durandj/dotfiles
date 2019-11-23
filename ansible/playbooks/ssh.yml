@@ -131,9 +131,9 @@
     - name: Restart SSH
       become: yes
       systemd:
-        name: ssh
+        name: "{{ 'sshd' if ansible_facts['distribution'] == 'Archlinux' else 'ssh' }}"
         state: restarted
 
     - name: Display Google Authenticator information to user
       debug:
-        msg: '{{ ubuntu_authenticator_results.stdout if ubuntu_authenticator_results else manjaro_authenticator_results.stdout }}'
+        msg: "{{ ubuntu_authenticator_results.stdout if 'stdout' in ubuntu_authenticator_results else manjaro_authenticator_results.stdout }}"
