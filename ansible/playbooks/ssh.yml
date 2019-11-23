@@ -121,7 +121,7 @@
         - ansible_facts['distribution'] == 'Ubuntu'
 
     - name: Generate Google Authenticator config for current user if it does not exist
-      command: google-authenticator --time-based --disallow-reuse --rate-limit 3 --rate-time 30 --window-size 3 --force --qr-mode UTF8
+      command: google-authenticator --time-based --disallow-reuse --rate-limit 3 --rate-time 30 --window-size 3 --force --qr-mode UTF8 --no-confirm
       args:
         creates: ~/.google_authenticator
       register: manjaro_authenticator_results
