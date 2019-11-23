@@ -1,0 +1,139 @@
+---
+- hosts: all
+  tasks:
+    - name: Install SSH and tools (Ubuntu)
+      become: yes
+      apt:
+        name:
+          - openssh-server
+          - fail2ban
+          - libpam-google-authenticator
+        update_cache: yes
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+
+    - name: Install SSH and tools (Manjaro)
+      become: yes
+      pacman:
+        name:
+          - openssh
+          - fail2ban
+          - libpam-google-authenticator
+        update_cache: yes
+      when:
+        - ansible_facts['distribution'] == 'Archlinux'
+
+    - name: Disable root login
+      become: yes
+      replace:
+        path: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin yes$'
+        replace: 'PermitRootLogin no'
+
+    - name: Create fail2ban jail configuration directory
+      become: yes
+      file:
+        path: /etc/fail2ban/jail.d
+        state: directory
+        mode: '0755'
+
+    - name: Create fail2ban override directory
+      become: yes
+      file:
+        path: /etc/systemd/fail2ban.service.d
+        state: directory
+        mode: '0755'
+
+    - name: Restrict fail2ban permissions
+      become: yes
+      copy:
+        dest: /etc/systemd/fail2ban.service.d/override.conf
+        content: |
+          [Service]
+          PrivateDevices=yes
+          PrivateTmp=yes
+          ProtectHome=read-only
+          ProtectSystem=strict
+          NoNewPrivileges=yes
+          ReadWritePaths=-/var/run/fail2ban
+          ReadWritePaths=-/var/lib/fail2ban
+          ReadWritePaths=-/var/log/fail2ban
+          ReadWritePaths=-/var/spool/postfix/maildrop
+          CapabilityBoundingSet=CAP_AUDIT_READ CAP_DAC_READ_SEARCH CAP_NET_ADMIN CAP_NET_RAW
+        force: true
+
+    - name: Set fail2ban log location
+      become: yes
+      copy:
+        dest: /etc/fail2ban/fail2ban.d/log.conf
+        content: |
+          [Definition]
+          logtarget = /var/log/fail2ban/fail2ban.log
+
+    - name: Create SSHD jail
+      become: yes
+      copy:
+        dest: /etc/fail2ban/jail.d/sshd.conf
+        content: |
+          [sshd]
+          enabled = true
+
+    - name: Reload fail2ban and mark it to start on boot
+      become: yes
+      systemd:
+        name: fail2ban
+        state: restarted
+        enabled: yes
+
+    - name: Enable Google Authenticator PAM module
+      become: yes
+      lineinfile:
+        path: /etc/pam.d/sshd
+        line: auth required pam_google_authenticator.so
+
+    - name: Enable challenge authentication in SSH
+      become: yes
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^ChallengeResponseAuthentication .+'
+        line: 'ChallengeResponseAuthentication yes'
+
+    - name: Disable password authentication in SSH
+      become: yes
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '(# *)?PasswordAuthentication .+'
+        line: 'PasswordAuthentication no'
+
+    - name: Enable pubkey authentication in SSH
+      become: yes
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: 'PubkeyAuthentication .+'
+        line: 'PubkeyAuthentication yes'
+
+    - name: Generate Google Authenticator config for current user if it does not exist
+      command: google-authenticator --time-based --disallow-reuse --rate-limit 3 --rate-time 30 --window-size 3 --force --qr-mode UTF8
+      args:
+        creates: ~/.google_authenticator
+      register: ubuntu_authenticator_results
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+
+    - name: Generate Google Authenticator config for current user if it does not exist
+      command: google-authenticator --time-based --disallow-reuse --rate-limit 3 --rate-time 30 --window-size 3 --force --qr-mode UTF8
+      args:
+        creates: ~/.google_authenticator
+      register: manjaro_authenticator_results
+      when:
+        - ansible_facts['distribution'] == 'Archlinux'
+
+    - name: Restart SSH
+      become: yes
+      systemd:
+        name: ssh
+        state: restarted
+
+    - name: Display Google Authenticator information to user
+      debug:
+        msg: '{{ ubuntu_authenticator_results.stdout if ubuntu_authenticator_results else manjaro_authenticator_results.stdout }}'
