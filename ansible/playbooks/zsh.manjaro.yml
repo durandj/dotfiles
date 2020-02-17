@@ -45,3 +45,15 @@
       shell: "{{ playbook_dir }}/../../zsh/create_solarized_theme.sh"
       when: has_profile.stdout != 'true'
 
+    - name: Add commands for managing secrets
+      become: yes
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+      with_items:
+        - src: "{{ playbook_dir }}/../../zsh/create-secret"
+          dest: /usr/local/bin
+        - src: "{{ playbook_dir }}/../../zsh/get-secret"
+          dest: /usr/local/bin
+        - src: "{{ playbook_dir }}/../../zsh/delete-secret"
+          dest: /usr/local/bin
