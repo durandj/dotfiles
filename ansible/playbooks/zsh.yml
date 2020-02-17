@@ -1,7 +1,7 @@
 ---
 - hosts: all
   tasks:
-    - name: Install Zsh
+    - name: Install Zsh (Ubuntu)
       become: yes
       apt:
         name:
@@ -12,6 +12,20 @@
           - unzip
           - zsh
         update_cache: yes
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+
+    - name: Install Zsh (Manjaro)
+      become: yes
+      pacman:
+        name:
+          - git
+          - python-pygments
+          - unzip
+          - zsh
+        update_cache: yes
+      when:
+        - ansible_facts['distribution'] == 'Archlinux'
 
     - name: Set default shell to Zsh
       become: yes
