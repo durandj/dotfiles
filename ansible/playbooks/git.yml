@@ -4,12 +4,31 @@
     GIT_IGNORE_VERSION: 1.0.3
 
   tasks:
+    - name: Add latest Git PPA
+      become: yes
+      apt_repository:
+        repo: ppa:git-core/ppa
+        state: present
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+
+    - name: Install Git
+      become: yes
+      apt:
+        name:
+          - git
+        update_cache: yes
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+
     - name: Install Git
       become: yes
       pacman:
         name:
           - git
         update_cache: yes
+      when:
+        - ansible_facts['distribution'] == 'Archlinux'
 
     - name: Add configuration
       copy:

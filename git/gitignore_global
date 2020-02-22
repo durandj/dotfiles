@@ -17,6 +17,11 @@ tags.temp
 .ycm_extra_conf.py
 
 ####################
+# Restic
+####################
+.restic-ignore
+
+####################
 # Python
 ####################
 *.pyc

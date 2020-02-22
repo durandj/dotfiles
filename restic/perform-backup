@@ -1,84 +1,104 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python3
 
-RESTIC_DIR=~/.config/restic
-EXCLUDE_FILE=$RESTIC_DIR/exclude
-CONFIG_FILE=$RESTIC_DIR/files
+import datetime
+import os
+import os.path
+import subprocess
+import sys
 
-function check_repo_name {
-    if [ "$RESTIC_REPOSITORY" == "" ]; then
-        echo 'Environment variable RESTIC_REPOSITORY must be set'
-        echo 'Run configure-backup to setup Restic'
-        exit 1
-    fi
-}
+from typing import List
 
-function check_config_file {
-    if [ ! -f "$CONFIG_FILE" ]; then
-        echo "File patterns must be given in the $CONFIG_FILE file"
-        exit 1
-    fi
-}
 
-expand_path() {
-    local path
-    local -a path_elements result_path_elements
-    IFS=':' read -r -a path_elements <<<"$1"
-    : "${path_elements[@]}"
-    for path in "${path_elements[@]}"; do
-        : "$path"
-        case $path in
-        "~+"/*)
-            path=$PWD/${path#"~+/"}
-            ;;
-        "~-"/*)
-            path=$OLDPWD/${path#"~-/"}
-            ;;
-        "~"/*)
-            path=$HOME/${path#"~/"}
-            ;;
-        "~"*)
-            username=${path%%/*}
-            username=${username#"~"}
-            IFS=: read -r _ _ _ _ _ homedir _ < <(getent passwd "$username")
-            if [[ $path = */* ]]; then
-            path=${homedir}/${path#*/}
-            else
-            path=$homedir
-            fi
-            ;;
-        esac
-        result_path_elements+=( "$path" )
-    done
-    local result
-    printf -v result '%s:' "${result_path_elements[@]}"
-    printf '%s\n' "${result%:}"
-}
+RESTIC_CONFIG_DIR = os.path.expanduser('~/.config/restic')
+INCLUDE_FILE_CONFIG = os.path.join(RESTIC_CONFIG_DIR, 'files')
+EXCLUDE_FILE_CONFIG = os.path.join(RESTIC_CONFIG_DIR, 'exclude')
+IGNORE_FILE_BASE_NAME = '.restic-ignore'
 
-function get_files {
-    local files=''
-    while read file; do
-        files="$files $(expand_path $file)"
-    done < $CONFIG_FILE
+def check_restic_settings() -> None:
+    restic_repository = os.getenv('RESTIC_REPOSITORY')
+    if restic_repository is None:
+        print('RESTIC_REPOSITORY environment variable must be set')
+        sys.exit(1)
 
-    echo $files
-}
+    if not os.path.exists(INCLUDE_FILE_CONFIG):
+        print(f'Configuration file for which files to backup must exist at: {INCLUDE_FILE_CONFIG}')
+        sys.exit(1)
 
-function get_snapshot_tag {
-    echo `date --utc --iso-8601=seconds`
-}
+    if not os.path.exists(EXCLUDE_FILE_CONFIG):
+        print(f'Configuration file for which files to exclude must exist at: {EXCLUDE_FILE_CONFIG}')
+        sys.exit(1)
 
-function main {
-    check_repo_name
-    check_config_file
 
-    local snapshot_tag=$(get_snapshot_tag)
-    local files=$(get_files)
+def normalize_path(path: str) -> str:
+    return os.path.expanduser(
+        os.path.expandvars(
+            path.strip()
+        )
+    )
 
-    restic backup \
-        --verbose \
-        --tag $snapshot_tag \
-        --exclude-file $EXCLUDE_FILE \
-        $files
-}
 
-main
+def get_include_files() -> List[str]:
+    with open(INCLUDE_FILE_CONFIG, 'r') as config_file:
+        return [
+            normalize_path(include_file.strip())
+            for include_file in config_file.readlines()
+        ]
+
+
+def parse_ignore_file(ignore_path: str) -> List[str]:
+    base_dir = os.path.dirname(ignore_path)
+
+    with open(ignore_path, 'r') as ignore_file:
+        lines = map(lambda line: line.strip(), ignore_file.readlines())
+
+    return [
+        os.path.join(base_dir, line[1:]) if line.startswith('/') \
+            else os.path.join(base_dir, '*', line)
+        for line in lines
+    ]
+
+
+def get_exclude_patterns(included_files: List[str]) -> List[str]:
+    exclude_patterns: List[str] = []
+
+    for include_file in included_files:
+        for path, _, files in os.walk(include_file):
+            if IGNORE_FILE_BASE_NAME not in files:
+                continue
+
+            ignore_file_path = os.path.join(path, IGNORE_FILE_BASE_NAME)
+            exclude_patterns.extend(parse_ignore_file(ignore_file_path))
+
+    return exclude_patterns
+
+
+def create_snapshot_tag() -> str:
+    now = datetime.datetime.utcnow().replace(microsecond=0)
+
+    return now.isoformat()
+
+
+def main() -> None:
+    check_restic_settings()
+
+    include_files = get_include_files()
+    exclude_patterns = get_exclude_patterns(include_files)
+
+    snapshot_tag = create_snapshot_tag()
+
+    command = [
+        'restic', 'backup',
+        '--verbose',
+        '--tag', snapshot_tag,
+        '--exclude-file', EXCLUDE_FILE_CONFIG,
+    ]
+
+    for exclude_pattern in exclude_patterns:
+        command.extend(['--exclude', exclude_pattern])
+
+    command.extend(include_files)
+
+    subprocess.check_call(command)
+
+if __name__ == '__main__':
+    main()
