@@ -1,1 +1,0 @@
-/home/james/workspace/go/src/github.com/mdempsky/gocode/nvim/autoload/gocomplete.vim
