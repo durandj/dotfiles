@@ -1,6 +1,12 @@
 ---
 - hosts: all
   tasks:
+    - name: Add NeoVim PPA repository for latest version
+      become: yes
+      apt_repository:
+        repo: ppa:neovim-ppa/stable
+        state: present
+
     - name: Install NeoVim
       become: yes
       apt:
@@ -14,39 +20,11 @@
           - python-dev
         update_cache: yes
 
-    - name: Create NeoVim config directory
+    - name: Setup NeoVim configuration
       file:
-        path: ~/.config/nvim
-        state: directory
-
-    - name: Copy core NeoVim config
-      copy:
-        src: "{{ playbook_dir }}/../../nvim/init.vim"
-        dest: ~/.config/nvim/init.vim
-        force: yes
-
-    - name: Copy autoload directory
-      copy:
-        src: "{{ playbook_dir }}/../../nvim/autoload"
-        dest: ~/.config/nvim/
-        force: yes
-
-    - name: Copy filetype directory
-      copy:
-        src: "{{ playbook_dir }}/../../nvim/ftplugin"
-        dest: ~/.config/nvim/
-        force: yes
-
-    - name: Copy plugin directory
-      copy:
-        src: "{{ playbook_dir }}/../../nvim/plugin"
-        dest: ~/.config/nvim/
-        force: yes
+        src: "{{ playbook_dir }}/../../nvim"
+        dest: ~/.config/nvim
+        state: link
 
     - name: Install NeoVim plugins
-      shell: nvim +PlugInstall +qall
-
-    - name: Build YouCompleteMe for NeoVim
-      shell: "./install.py {{ completers | join(' ') }}"
-      args:
-        chdir: ~/.config/nvim/plugged/YouCompleteMe
+      shell: nvim +PackerInstall +qall
