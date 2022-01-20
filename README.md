@@ -65,15 +65,6 @@ do it.
 
 ### Special Notes
 
-#### Nvim
-
-You'll need to include the `--extra-vars` argument for this playbook
-and specify a set of completers to use. For example:
-
-```
---extra-vars '{ "completers": [ "--clang-completer" ] }'
-```
-
 #### Zsh
 
 Because of the way the oh-my-zsh installer works, it expects Zsh to
