@@ -51,7 +51,18 @@
       become: yes
       shell: "{{ playbook_dir }}/../../zsh/install_font.sh"
       args:
-        creates: "~/.local/share/fonts/NerdFonts/Inconsolata Nerd Font Complete.otf"
+        creates: "~/.local/share/fonts/NerdFonts/Sauce Code Pro Nerd Font Complete.ttf"
+
+    - name: Download Zsh theme
+      git:
+        repo: https://github.com/durandj/remotely-amused.git
+        dest: ~/.oh-my-zsh/custom/themes/remotely-amused
+
+    - name: Setup Zsh theme
+      file:
+        src: ~/.oh-my-zsh/custom/themes/remotely-amused
+        path: ~/.oh-my-zsh/custom/themes/remotely-amused.zsh-theme
+        state: link
 
     - name: Check for terminal profile
       shell: "{{ playbook_dir }}/../../zsh/is_theme_configured.sh"

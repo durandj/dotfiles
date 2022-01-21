@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -o xtrace -o errexit
+
 nerd_font_version=v2.0.0
 font_name=SourceCodePro
 font_dir=~/.local/share/fonts/NerdFonts
