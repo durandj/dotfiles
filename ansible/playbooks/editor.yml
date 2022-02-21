@@ -1,0 +1,44 @@
+---
+- hosts: all
+  tasks:
+    - name: Add NeoVim PPA repository for latest version of NeoVim
+      become: yes
+      apt_repository:
+        repo: ppa:neovim-ppa/stable
+        state: present
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+
+    - name: Install NeoVim
+      become: yes
+      apt:
+        name:
+          - build-essential
+          - cmake
+          - exuberant-ctags
+          - git
+          - neovim
+        update_cache: yes
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+
+    - name: Install dependencies
+      become: yes
+      pacman:
+        name:
+          - cmake
+          - ctags
+          - git
+          - neovim
+        update_cache: yes
+      when:
+        - ansible_facts['distribution'] == 'Archlinux'
+
+    - name: Add custom LunarVim configuration
+      file:
+        src: "{{ playbook_dir }}/../../lvim/config.lua"
+        dest: ~/.config/lvim/config.lua
+        state: link
+
+    - name: Install LunarVim configuration
+      shell: bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh) --no-install-dependencies
