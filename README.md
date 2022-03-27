@@ -41,7 +41,7 @@ git clone https://github.com/kewlfft/ansible-aur.git ~/.ansible/plugins/modules/
 With `pipx` installed, I use that to install Ansible.
 
 ```bash
-pipx install ansible
+pipx install ansible --include-deps
 ```
 
 ### Playbooks
