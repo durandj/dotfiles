@@ -123,27 +123,41 @@ formatters.setup {
 -- -- set additional linters
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
---   { command = "flake8", filetypes = { "python" } },
---   {
---     -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
---     command = "shellcheck",
---     ---@usage arguments to pass to the formatter
---     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
---     extra_args = { "--severity", "warning" },
---   },
---   {
---     command = "codespell",
---     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
---     filetypes = { "javascript", "python" },
---   },
+  --   { command = "flake8", filetypes = { "python" } },
+  --   {
+  --     -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
+  --     command = "shellcheck",
+  --     ---@usage arguments to pass to the formatter
+  --     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
+  --     extra_args = { "--severity", "warning" },
+  --   },
+  --   {
+  --     command = "codespell",
+  --     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
+  --     filetypes = { "javascript", "python" },
+  --   },
   {
     command = "shellcheck",
-    filetypes = {"sh"},
+    filetypes = { "sh" },
   },
   {
     command = "eslint",
-    filetypes = {"json", "jsonc", "javascript", "javascriptreact", "typescript", "typescriptreact"},
+    filetypes = { "json", "jsonc", "javascript", "javascriptreact", "typescript", "typescriptreact" },
   },
+  {
+    command = "golangci-lint",
+    filetypes = { "go" },
+  },
+  {
+    command = "hadolint",
+    filetypes = { "dockerfile" },
+  },
+}
+
+-- Parser configs
+local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
+parser_configs.hcl = {
+  filetype = "hcl", "terraform",
 }
 
 -- HACK: work-around for https://github.com/lukas-reineke/indent-blankline.nvim/issues/59
@@ -175,7 +189,7 @@ lvim.plugins = {
         show_current_context_start = true,
         show_end_of_line           = true,
         space_char_blank_line      = " ",
-        char_highlight_list = {
+        char_highlight_list        = {
           "IndentBlankLineIndent1",
         },
         space_char_highlight_list  = {
