@@ -14,4 +14,4 @@
     - name: Add goenv to environment
       copy:
         dest: ~/.zshrc.d/golang
-        content: "export GOENV_ROOT=\"$HOME/.goenv\"\nexport PATH=\"$GOENV_ROOT/bin:$PATH\"\neval \"$(goenv init -)\"\nexport PATH=\"$GOROOT/bin:$PATH\"\nexport PATH=\"$GOPATH/bin:$PATH\""
+        content: "export GOENV_ROOT=\"$HOME/.goenv\"\nexport PATH=\"$GOENV_ROOT/bin:$PATH\"\neval \"$(goenv init -)\"\nexport PATH=\"$GOROOT/bin:$PATH\"\nexport PATH=\"$PATH:$GOPATH/bin\""
