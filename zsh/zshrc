@@ -78,6 +78,7 @@ plugins=(
     git
     gitfast
     rust
+    terraform
 )
 
 source $ZSH/oh-my-zsh.sh
