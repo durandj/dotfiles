@@ -13,10 +13,8 @@
       become: yes
       apt:
         name:
-          - build-essential
-          - cmake
-          - exuberant-ctags
           - git
+          - make
           - neovim
         update_cache: yes
       when:
@@ -26,19 +24,18 @@
       become: yes
       pacman:
         name:
-          - cmake
-          - ctags
           - git
+          - make
           - neovim
         update_cache: yes
       when:
         - ansible_facts['distribution'] == 'Archlinux'
+
+    - name: Install LunarVim configuration
+      shell: bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh) --no-install-dependencies
 
     - name: Add custom LunarVim configuration
       file:
         src: "{{ playbook_dir }}/../../lvim/config.lua"
         dest: ~/.config/lvim/config.lua
         state: link
-
-    - name: Install LunarVim configuration
-      shell: bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh) --no-install-dependencies

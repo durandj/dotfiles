@@ -1,0 +1,28 @@
+---
+- hosts: all
+  tasks:
+    - name: Install asdf dependencies
+      become: yes
+      apt:
+        name:
+          - curl
+          - git
+        update_cache: yes
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+
+    - name: Install asdf dependencies
+      become: yes
+      pacman:
+        name:
+          - curl
+          - git
+        update_cache: yes
+      when:
+        - ansible_facts['distribution'] == 'Archlinux'
+
+    - name: Checkout asdf Git repo
+      git:
+        repo: https://github.com/asdf-vm/asdf.git
+        dest: ~/.asdf
+        version: v0.10.0

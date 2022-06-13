@@ -100,7 +100,11 @@ export MYNVIMRC=~/.config/nvim/init.vim
 export PATH=~/.local/bin:$PATH
 
 # Setup dircolors to match terminal theme
-eval `dircolors ~/.dir_colors/dircolors`
+if [ -e ~/.dir_colors/dircolors ]; then
+  eval $(dircolors ~/.dir_colors/dircolors)
+elif [ -f ~/.dir_colors ]; then
+  eval $(dircolors ~/.dir_colors)
+fi
 
 # Source any additional, local configurations
 if [ -d ~/.zshrc.d ];

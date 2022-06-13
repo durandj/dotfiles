@@ -42,13 +42,11 @@
         state: link
 
     - name: Install git-ignore
-      become: yes
       get_url:
         url: "https://github.com/durandj/git-ignore/releases/download/v{{ GIT_IGNORE_VERSION }}/git-ignore_v{{ GIT_IGNORE_VERSION }}_linux_amd64"
-        dest: /usr/local/bin/git-ignore
+        dest: ~/.local/bin/git-ignore
 
     - name: Set git-ignore permissions
-      become: yes
       file:
-        path: /usr/local/bin/git-ignore
+        path: ~/.local/bin/git-ignore
         mode: 755

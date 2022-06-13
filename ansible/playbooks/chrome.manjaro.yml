@@ -1,9 +1,0 @@
----
-- hosts: all
-  tasks:
-    - name: Install Chrome
-      aur:
-        name:
-          - google-chrome
-          - google-chrome-beta
-          - google-chrome-dev

@@ -1,7 +1,7 @@
 ---
 - hosts: all
   vars:
-    RESTIC_VERSION: 0.9.4
+    RESTIC_VERSION: 0.13.1
 
   tasks:
     - name: Install dependencies
@@ -10,6 +10,17 @@
         name:
           - bzip2
         state: present
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+
+    - name: Install dependencies
+      become: yes
+      pacman:
+        name:
+          - bzip2
+        state: present
+      when:
+        - ansible_facts['distribution'] == 'Archlinux'
 
     - name: Install restic
       become: yes

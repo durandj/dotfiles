@@ -5,11 +5,7 @@
       become: yes
       apt:
         name:
-          - dconf-cli
-          - font-manager
           - git
-          - python-pygments
-          - unzip
           - zsh
         update_cache: yes
       when:
@@ -20,8 +16,6 @@
       pacman:
         name:
           - git
-          - python-pygments
-          - unzip
           - zsh
         update_cache: yes
       when:
@@ -47,12 +41,6 @@
         force: true
         state: link
 
-    - name: Install patched font
-      become: yes
-      shell: "{{ playbook_dir }}/../../zsh/install_font.sh"
-      args:
-        creates: "~/.local/share/fonts/NerdFonts/Sauce Code Pro Nerd Font Complete.ttf"
-
     - name: Download Zsh theme
       git:
         repo: https://github.com/durandj/remotely-amused.git
@@ -63,14 +51,6 @@
         src: ~/.oh-my-zsh/custom/themes/remotely-amused
         path: ~/.oh-my-zsh/custom/themes/remotely-amused.zsh-theme
         state: link
-
-    - name: Check for terminal profile
-      shell: "{{ playbook_dir }}/../../zsh/is_theme_configured.sh"
-      register: has_profile
-
-    - name: Create terminal profile
-      shell: "{{ playbook_dir }}/../../zsh/create_solarized_theme.sh"
-      when: has_profile.stdout != 'true'
 
     - name: Add commands for managing secrets
       become: yes

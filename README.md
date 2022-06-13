@@ -44,6 +44,13 @@ With `pipx` installed, I use that to install Ansible.
 pipx install ansible --include-deps
 ```
 
+If you're on Arch/Manjaro you'll also need some additional plugins for
+Ansible which can be by running the following:
+
+```bash
+ansible-galaxy collection install --requirements-file ./ansible/manjaro_requirements.yml
+```
+
 ### Playbooks
 
 Once Ansible is setup you can run any of the playbooks by using the
