@@ -5,6 +5,7 @@
       become: yes
       apt:
         name:
+          - curl
           - git
           - zsh
         update_cache: yes
@@ -15,6 +16,7 @@
       become: yes
       pacman:
         name:
+          - curl
           - git
           - zsh
         update_cache: yes

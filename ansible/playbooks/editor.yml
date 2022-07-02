@@ -4,7 +4,7 @@
     - name: Add NeoVim PPA repository for latest version of NeoVim
       become: yes
       apt_repository:
-        repo: ppa:neovim-ppa/stable
+        repo: ppa:neovim-ppa/unstable
         state: present
       when:
         - ansible_facts['distribution'] == 'Ubuntu'
@@ -32,10 +32,11 @@
         - ansible_facts['distribution'] == 'Archlinux'
 
     - name: Install LunarVim configuration
-      shell: bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh) --no-install-dependencies
+      shell: curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh | bash -s - -- --no-install-dependencies
 
     - name: Add custom LunarVim configuration
       file:
         src: "{{ playbook_dir }}/../../lvim/config.lua"
         dest: ~/.config/lvim/config.lua
         state: link
+        force: yes
