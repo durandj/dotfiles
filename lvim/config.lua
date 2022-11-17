@@ -70,6 +70,18 @@ lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
+lvim.builtin.indentlines.options = {
+  show_current_context       = true,
+  show_current_context_start = true,
+  show_end_of_line           = true,
+  space_char_blank_line      = " ",
+  char_highlight_list        = {
+    "IndentBlankLineIndent1",
+  },
+  space_char_highlight_list  = {
+    "IndentBlanklineIndent1",
+  },
+}
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
@@ -207,23 +219,6 @@ lvim.plugins = {
   -- },
   {
     "editorconfig/editorconfig-vim",
-  },
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    config = function()
-      require("indent_blankline").setup({
-        show_current_context       = true,
-        show_current_context_start = true,
-        show_end_of_line           = true,
-        space_char_blank_line      = " ",
-        char_highlight_list        = {
-          "IndentBlankLineIndent1",
-        },
-        space_char_highlight_list  = {
-          "IndentBlanklineIndent1",
-        },
-      })
-    end,
   },
   {
     "folke/todo-comments.nvim",
