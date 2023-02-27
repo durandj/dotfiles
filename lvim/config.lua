@@ -222,19 +222,16 @@ lvim.plugins = {
   },
   {
     "folke/todo-comments.nvim",
-    requires = {
+    dependencies = {
       "nvim-lua/plenary.nvim",
     },
-    config = function()
-      require("todo-comments").setup({})
-    end,
   },
   {
     "wakatime/vim-wakatime",
   },
   {
     "mechatroner/rainbow_csv",
-    run = function()
+    build = function()
       vim.cmd [[let g:disable_rainbow_key_mappings = 1]]
     end,
   },
