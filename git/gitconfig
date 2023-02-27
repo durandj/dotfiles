@@ -9,11 +9,14 @@
     excludesfile = ~/.gitignore_global
     editor = nvim
 
+[init]
+    defaultBranch = main
+
 [push]
     default = simple
     recurseSubmodules = check
 
 [user]
-    email = james.durand@alumni.msoe.edu
+    email = james@durand.zone
     name = James Durand
     useconfigonly = true
